@@ -1,7 +1,8 @@
 const containerCards = document.querySelector('#main')
 const searchContainer = document.querySelector('.input-container')
 const searchAddItem = document.querySelector('.search-item-container')
-let itemSearch = []
+
+let itemSearched = []
 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -26,7 +27,7 @@ function showCards(){
                     }).join('')
                     
                     return `
-                         <section class="card">
+                         <section class="card ${info.featured ? 'borda' : ''}">
                               <img src="${info.logo}" alt="" class="photo">
                               <section class="info">
                                    <section class="description">
@@ -66,50 +67,59 @@ function showCards(){
 
 function select(){
      let itemToSearch = document.querySelectorAll('.select')
-     itemToSearch.forEach((item) =>{
-          item.addEventListener('click', (e) => {
-               itemSearch.push(e.currentTarget.textContent)
-               let itemDisplay = itemSearch.map((itemBox) => {
-                    return `
-                    <section class="search-item">
-                         <p class="item-name">${itemBox}</p>
-                         <section class="remove-item">
-                              <img src="images/icon-remove.svg" alt="">
-                         </section>
-                    </section>
-                    `
-               }).join('')
-
-               testeInput()
-
-               searchAddItem.innerHTML = itemDisplay
-               console.log(itemSearch)
-               removeBtns()
-          })
-     })
+     itemToSearch.forEach((item) => {
+            item.addEventListener('click', (e) => {
+                  if(itemSearched.indexOf(e.currentTarget.textContent) === -1){
+                        itemSearched.push(e.currentTarget.textContent)
+                        let itemDisplay = itemSearched.map((itemBox) => {
+                              return `
+                              <section class="search-item">
+                                    <p class="item-name">${itemBox}</p>
+                                    <section class="remove-item">
+                                          <img src="images/icon-remove.svg" alt="">
+                                    </section>
+                              </section>
+                              `
+                        }).join('')
+            
+                        testeInput()
+            
+                        searchAddItem.innerHTML = itemDisplay
+                        console.log(itemSearched)
+                        removeBtns()
+                  }
+            }) 
+      })
+      clear()
 }
 
-function filter(){
 
+function clear(){
+      const clearBtn = document.querySelector('#clear')
+      clearBtn.addEventListener('click', () => {
+            itemSearched = []
+            testeInput()
+      })
 }
+
 
 function removeBtns(){
      let removeBtn = document.querySelectorAll('.remove-item')
      removeBtn.forEach((btn) => {
           btn.addEventListener('click', (e) => {
+            let parentElement = e.currentTarget.parentNode
+            let childElement = parentElement.children[0].textContent
+            let index = itemSearched.indexOf(childElement)
 
-               let parentElement = e.currentTarget.parentNode
-               let childElement = parentElement.children[0].textContent
-               let index = itemSearch.indexOf(childElement)
-               itemSearch.splice(index, 1)
-               parentElement.style.display = 'none'
-               testeInput()
+            itemSearched.splice(index, 1)
+            parentElement.style.display = 'none'
+            testeInput()
           })
      })
 }
 
 function testeInput(){                     
-     if(itemSearch.length >= 1){
+     if(itemSearched.length >= 1){
           searchContainer.style.display = 'flex'
      }
      else{

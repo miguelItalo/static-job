@@ -74,7 +74,7 @@
     "languages": ["JavaScript"],
     "tools": ["Ruby", "Sass"]
   },
-  {
+  {   
     "id": 6,
     "company": "FaceIt",
     "logo": "./images/faceit.svg",
